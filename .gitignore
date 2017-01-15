@@ -1,0 +1,76 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(9,8,7,6,5,4);
+String dato;
+int on=0;
+int tamano;
+int i=0;
+int off=0;
+
+void setup() {
+  // put your setup code here, to run once:
+lcd.begin(16,2);
+Serial.begin(9600);
+attachInterrupt(0,INT, LOW);
+attachInterrupt(1,turn, LOW);
+pinMode(INT, INPUT);
+
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  if(off==1){
+  if(Serial.available()>0){
+    dato=Serial.readString();
+    tamano=dato.length();
+    char vector[tamano];
+    dato.toCharArray(vector, tamano);
+    
+    if(on==1){
+     
+      juego2();
+    }
+    if(on==0){
+ 
+    juego1();
+    }
+    
+  }  
+}
+else {
+  lcd.clear();
+  }
+}
+
+  void turn(){
+    off=1-off;
+  }
+
+  void INT(){
+    on=1-on;
+  }
+  
+  void juego1(){
+     Serial.print(" Juego 1");
+     for(;i<=tamano;i++){
+     // j=1-j;
+      lcd.setCursor(i,0);
+      lcd.print(dato[i]);
+      delay(100);
+      lcd.clear();
+     } 
+  }
+  void juego2(){
+     Serial.print(" Juego 2");
+     for(;i<=tamano;i++){
+     // j=1-j;
+      lcd.setCursor(i,0);
+      lcd.print(dato[i]);
+      delay(100);
+     }
+       for(;i>=0;i--){
+    //  j=1-j;
+      lcd.setCursor(i,0);
+      lcd.print(' ');
+      delay(100);
+    }
+  }
